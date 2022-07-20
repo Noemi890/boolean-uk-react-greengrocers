@@ -3,6 +3,10 @@ import initialStoreItems from '../store-items'
 
 initialStoreItems.forEach(item => {
   item.quantity = 1
+  item.type = 
+  (item.name === 'bananas' || item.name === 'berry' || item.name === 'apricot'
+   || item.name === 'blueberry' || item.name === 'apple') ?
+   'fruit' : 'veg'
 })
 
 export const Header = props => {
@@ -10,11 +14,12 @@ export const Header = props => {
 
   const [details, setDetails] = useState(false)
   const [storeItems, setStoreItems] = useState(initialStoreItems)
-  const [filter, setFilter] = useState(false)
+  const [sort, setSort] = useState(false)
 
-  const filteredItems = () => {
+  console.log(storeItems)
+  const sortedItems = () => {
     let updatedStoreItems = initialStoreItems
-    if (!filter) {
+    if (!sort) {
       updatedStoreItems = storeItems.slice().sort((a, b) => {
         if (a.price < b.price) return -1
         else if (a.price > b.price) return 1
@@ -22,7 +27,16 @@ export const Header = props => {
       })
     }
     setStoreItems(updatedStoreItems)
-    setFilter(!filter)
+    setSort(!sort)
+  }
+
+  const filterItems = (value) => {
+    console.log(value)
+    if (value === 'all') setStoreItems(initialStoreItems)
+    else {
+      const updatedStoreItems = initialStoreItems.filter(item => item.type === value)
+      setStoreItems(updatedStoreItems)
+    }
   }
 
   return (
@@ -38,11 +52,20 @@ export const Header = props => {
         </button>
         <button
           onClick={() => {
-            filteredItems()
+            sortedItems()
           }}
         >
           filter by price
         </button>
+        <form action="#">
+      <select name="languages" id="lang" onChange={(event) => {
+        filterItems(event.target.value)
+      }}>
+        <option value="all">All</option>
+        <option value="fruit">Fruit</option>
+        <option value="veg">Vegetables</option>
+      </select>
+</form>
       </div>
       <ul className="item-list store--item-list">
         {storeItems.map((item, index) => {
