@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import initialStoreItems from '../store-items'
 
 initialStoreItems.forEach(item => {
@@ -15,10 +15,11 @@ export const Header = props => {
   const [details, setDetails] = useState(false)
   const [storeItems, setStoreItems] = useState(initialStoreItems)
   const [sort, setSort] = useState(false)
+  const [filteredItems, setFilteredItems] = useState([])
 
   console.log(storeItems)
   const sortedItems = () => {
-    let updatedStoreItems = initialStoreItems
+    let updatedStoreItems = (filteredItems.length === 0) ? initialStoreItems : filteredItems
     if (!sort) {
       updatedStoreItems = storeItems.slice().sort((a, b) => {
         if (a.price < b.price) return -1
@@ -32,9 +33,13 @@ export const Header = props => {
 
   const filterItems = (value) => {
     console.log(value)
-    if (value === 'all') setStoreItems(initialStoreItems)
+    if (value === 'all') {
+      setFilteredItems([])
+      setStoreItems(initialStoreItems)
+    }
     else {
       const updatedStoreItems = initialStoreItems.filter(item => item.type === value)
+      setFilteredItems(updatedStoreItems)
       setStoreItems(updatedStoreItems)
     }
   }
