@@ -1,5 +1,5 @@
 export const Cart = (props) => {
-    const {cart, remove, add, total } = props
+    const {cart, remove, add, total, removeAll } = props
     
     return (
         <main id="cart">
@@ -17,6 +17,7 @@ export const Cart = (props) => {
                     alt={item.name}
                     />
                     <p>{item.name}</p>
+                    <button onClick={() => {removeAll(item)}}>remove</button>
                     <button 
                       className='quantity-btn remove-btn center'
                       onClick={() => {remove(item)}}>-</button>

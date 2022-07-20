@@ -15,10 +15,13 @@ export default function App() {
   const cartCopy = cart.slice()
 
   const addItemToCart = (item) => {
-    console.log(item)
-    cartCopy.push(item)
-    getTotal()
-    setCart(cartCopy)
+    if (cartCopy.includes(item)) addQuantity(item)
+    else {
+      item.quantity = 1
+      cartCopy.push(item)
+      getTotal()
+      setCart(cartCopy)
+    }
   }
 
   const addQuantity = (item) => {
@@ -45,13 +48,21 @@ export default function App() {
       setTotal(myTotal.toFixed(2))
   }
 
+  const removeAll = (item) => {
+    const index = cart.indexOf(item)
+    cartCopy.splice(index, 1)
+    getTotal()
+    setCart(cartCopy)
+  }
+
   return (
     <>
       <Header onAddItemToCart={addItemToCart}/>
       <Cart cart={cart}
         add={addQuantity}
         remove={removeQuantity}
-        total={total}/>
+        total={total}
+        removeAll={removeAll} />
       <Footer />
     </>
   )
